@@ -13,10 +13,9 @@ export const handelSignup = async (req, res) => {
         if (existingUser) {
             return res.status(400).json({success: false, message: 'User already exists' });
         }
-        const newUser = new User({ name, email, password });
-        await newUser.save();
+        const newUser = await User.create({ name, email, password });
 
-        const token = jwt.sign({ email,password }, process.env.JWT_SECRET, { expiresIn: '1 days' });
+        const token = jwt.sign({ email}, process.env.JWT_SECRET, { expiresIn: '1d' });
         res.cookie('token', token, { httpOnly: true, secure: false, sameSite: 'lax' });
 
         res.status(201).json({ success: true, token , message: 'User registered successfully' });
@@ -32,7 +31,7 @@ export const handelLogin = async (req, res) => {
         if (!user) {
             return res.status(400).json({success: false, message: 'Invalid credentials' });
         }
-        const token = jwt.sign({ email,password }, process.env.JWT_SECRET, { expiresIn: '1 days' });
+        const token = jwt.sign({ email }, process.env.JWT_SECRET, { expiresIn: '1d' });
 
         res.cookie('token', token, { httpOnly: true, secure: false, sameSite: 'lax' });
         res.status(200).json({ success: true, token });

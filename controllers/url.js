@@ -34,7 +34,7 @@ export async function createShortUrl(req, res) {
 
     if (user) {
       await User.findOneAndUpdate(
-        { email: user.email, password: user.password },
+        { email: user.email },
         {
           $push: { myUrls: url._id },
         },
@@ -85,7 +85,7 @@ export const getUrlAnalytics = async (req, res) => {
 
   try {
     
-    const allUrl = await User.findOne({email: user.email,password: user.password}).populate({path:"myUrls",select:"shortUrl longUrl clicks createdAt -_id"});
+    const allUrl = await User.findOne({email: user.email}).populate({path:"myUrls",select:"shortUrl longUrl clicks createdAt -_id"});
 
     res.status(200).json({success: true, allUrl: allUrl.myUrls});
   } catch (err) {
