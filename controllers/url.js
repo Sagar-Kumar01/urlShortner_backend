@@ -4,7 +4,7 @@ import { nanoid } from "nanoid";
 
 export async function createShortUrl(req, res) {
   let { longUrls } = req.body;
-  let user = req.user;
+  let user = req.user; 
 
   if (!longUrls) {
     return res.status(400).send({ success: false, message: "url missing" });
@@ -43,7 +43,7 @@ export async function createShortUrl(req, res) {
 
     res
       .status(201)
-      .json({ shortUrl: `${process.env.BASE_URL}/${code}`, urlId: code });
+      .json({ success: true, "shortUrl": url.shortUrl, "longUrl": url.longUrl, "clicks": url.clicks ,"createdAt": url.createdAt});
   } catch (err) {
     res
       .status(500)
@@ -55,32 +55,28 @@ export async function redirectToLongUrl(req, res) {
   const { code } = req.params;
 
   try {
-    const user = await Url.findOneAndUpdate(
+    const url = await Url.findOneAndUpdate(
       { shortUrl: code },
       { $inc: { clicks: 1 } },
       { new: true },
     );
 
-    if (!code) {
+    if (!url) {
       return res.status(404).json({ error: "Short URL not found" });
     }
 
-    res.redirect(user.longUrl);
+    res.status(200).json({ success: true, longUrl: url.longUrl });
   } catch (err) {
     res.status(500).json({ error: "Failed to redirect" });
   }
 }
 
-export const getUrlAnalytics = async (req, res) => {
-  const { code } = req.params;
+export const getAll = async (req, res) => {
+
   let user = req.user;
 
   if (!user) {
     return res.status(401).json({ success: false, message: "Unauthorized" });
-  }
-
-  if (code.length < 8) {
-    return res.status(401).send({ success: false, message: "Wrong urlId" });
   }
 
   try {

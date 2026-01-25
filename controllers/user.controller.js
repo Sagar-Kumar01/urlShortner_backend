@@ -16,7 +16,14 @@ export const handelSignup = async (req, res) => {
         const newUser = await User.create({ name, email, password });
 
         const token = jwt.sign({ email}, process.env.JWT_SECRET, { expiresIn: '1d' });
-        res.cookie('token', token, { httpOnly: true, secure: false, sameSite: 'lax' });
+        const expiryDate = new Date(Date.now() + 86400000);
+        res.cookie('token', token, { 
+            httpOnly: true, 
+            secure: true,
+            sameSite: 'none', 
+            maxAge: 86400000,
+            expires: expiryDate
+        });
 
         res.status(201).json({ success: true, token , message: 'User registered successfully' });
     } catch (error) {
@@ -33,7 +40,14 @@ export const handelLogin = async (req, res) => {
         }
         const token = jwt.sign({ email }, process.env.JWT_SECRET, { expiresIn: '1d' });
 
-        res.cookie('token', token, { httpOnly: true, secure: false, sameSite: 'lax' });
+        const expiryDate = new Date(Date.now() + 86400000);
+        res.cookie('token', token, { 
+            httpOnly: true, 
+            secure: true,
+            sameSite: 'none', 
+            maxAge: 86400000,
+            expires: expiryDate
+        });
         res.status(200).json({ success: true, token });
 
     } catch (error) {
