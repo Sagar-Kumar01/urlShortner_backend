@@ -4,8 +4,7 @@ import jwt from 'jsonwebtoken';
 export default async function authVerifyMiddleware(req, res, next) {
   
   if (!req.cookies || !req.cookies.token) {
-    next();
-    return;
+    return next();
   }
   
   try {
@@ -14,7 +13,6 @@ export default async function authVerifyMiddleware(req, res, next) {
     req.user = decoded;
     next();
   } catch (error) {
-    
     return res.status(401).json({ success: false, message: "Unauthorized - Invalid token" });
   }
 }
