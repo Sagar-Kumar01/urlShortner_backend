@@ -17,16 +17,21 @@ A robust and scalable URL shortening service built with Node.js, Express, and Mo
 
 ```
 backend/
-├── controllers/          # Business logic for routes
-├── models/              # MongoDB schemas and models
-├── routes/              # API route definitions
-├── middlewares/         # Authentication and other middleware
-├── views/               # Frontend templates (if any)
-├── connection.js        # Database connection setup
-├── index.js            # Main application entry point
-├── package.json        # Project dependencies
-├── .env.example        # Environment variables template
-└── README.md          # This file
+├── controllers/
+│   ├── url.js              # URL creation, redirection, and analytics logic
+│   └── user.controller.js  # User authentication (signup, login, logout)
+├── middlewares/
+│   └── authVerify.middleware.js  # JWT authentication middleware
+├── models/
+│   ├── url.js              # URL schema definition
+│   └── user.model.js       # User schema definition
+├── routes/
+│   ├── url.js              # URL related routes
+│   └── user.route.js       # User authentication routes
+├── views/                  # View templates (if applicable)
+├── package.json            # Dependencies and scripts
+├── .env.example            # Environment variables example
+└── README.md               # Project documentation
 ```
 
 ## 🚀 Getting Started
@@ -224,17 +229,9 @@ curl -X POST http://localhost:8800/url/short \
 - Verify all dependencies are installed with `npm install`
 - Check console for specific error messages
 
-## 📄 License
-
-This project is licensed under the ISC License.
-
 ## 👨‍💻 Contributing
 
 Feel free to submit issues and enhancement requests!
-
-## 📞 Support
-
-For questions or issues, please create an issue in the repository.
 
 ---
 
