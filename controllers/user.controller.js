@@ -22,8 +22,8 @@ export const handelSignup = async (req, res) => {
         const expiryDate = new Date(Date.now() + 86400000);
         res.cookie('token', token, {
             httpOnly: true,
-            secure: false,
-            sameSite: 'lax',
+            secure: process.env.NODE_ENV === "production",
+            sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
             maxAge: 86400000,
             expires: expiryDate
         });
